@@ -38,7 +38,7 @@ export default function Task({
   }
 
   async function deleteTodo() {
-    const response = await fetch(`http://192.168.0.26:8080/todos/${id}`, {
+    const response = await fetch(`http://[IP]]:8080/todos/${id}`, {
       method: "DELETE",
     });
     clearTodo(id);

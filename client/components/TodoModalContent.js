@@ -7,7 +7,7 @@ export default function TodoModalContent({ id, title }) {
   const [focus, setFocus] = useState(false);
 
   const handleSubmit = async () => {
-    const response = await fetch("http://192.168.0.26:8080/todos/shared_todos", {
+    const response = await fetch("http://[IP]:8080/todos/shared_todos", {
       headers: {
         "Content-Type": "application/json",
         // esto se debe a que en la app especificamos que todo lo que nos llega es un json

@@ -15,7 +15,7 @@ export default function SharedTodoModalContent({
 
   async function fetchInfo() {
     const response = await fetch(
-      `http://192.168.0.26:8080/todos/shared_todos/${id}`,
+      `http://[IP]]:8080/todos/shared_todos/${id}`,
       {
         method: "GET",
         headers: {
