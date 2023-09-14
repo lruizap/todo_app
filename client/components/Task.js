@@ -1,12 +1,16 @@
+import CheckMark from "./CheckMark";
+import SharedTodoModalContent from "./SharedTodoModalContent";
+import TodoModalContent from "./TodoModalContent";
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
+  Pressable,
 } from "react-native";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Feather } from "@expo/vector-icons";
-import CheckMark from "./CheckMark";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
 
 export default function Task({
   id,
@@ -17,9 +21,24 @@ export default function Task({
   toggleTodo,
 }) {
   const [isDeleteActive, setIsDeleteActive] = useState(false);
+  const bottomSheetModalRef = useRef(null);
+  // Muestra el modal de compartido
+  const sharedBottomSheetRef = useRef(null);
+  // % de la pantalla que ocupa el modal
+  const snapPoints = ["25%", "48%", "75%"];
+  const snapPointsShared = ["40%"];
+
+  // Funciones para mostrar los modales
+  function handlePresentModal() {
+    bottomSheetModalRef.current?.present();
+  }
+
+  function handlePresentShared() {
+    sharedBottomSheetRef.current?.present();
+  }
 
   async function deleteTodo() {
-    const response = await fetch(`http://[IP]:8080/todos/${id}`, {
+    const response = await fetch(`http://192.168.0.26:8080/todos/${id}`, {
       method: "DELETE",
     });
     clearTodo(id);
@@ -35,19 +54,19 @@ export default function Task({
     >
       <View style={styles.containerTextCheckBox}>
         <CheckMark id={id} completed={completed} toggleTodo={toggleTodo} />
-        <Text style={styles.text}>{title.replaceAll('?', '')}</Text>
+        <Text style={styles.text}>{title.replaceAll('?', '').trim()}</Text>
       </View>
       {
         shared_with_id !== null ? (
           <Feather
-            // onPress={handlePresentShared}
+            onPress={handlePresentShared}
             name="users"
             size={20}
             color="#383839"
           />
         ) : (
           <Feather
-            // onPress={handlePresentModal}
+            onPress={handlePresentModal}
             name="share"
             size={20}
             color="#383839"
@@ -64,6 +83,30 @@ export default function Task({
           </Pressable>
         )
       }
+
+      {/* Modal de Todos Compartidos */}
+      <BottomSheetModal
+        ref={sharedBottomSheetRef}
+        snapPoints={snapPointsShared}
+        backgroundStyle={{ borderRadius: 50, borderWidth: 4 }}
+      >
+        <SharedTodoModalContent
+          id={id}
+          title={title.replaceAll('?', '').trim()}
+          shared_with_id={shared_with_id}
+          completed={completed}
+        />
+      </BottomSheetModal>
+
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        index={2}
+        snapPoints={snapPoints}
+        backgroundStyle={{ borderRadius: 50, borderWidth: 4 }}
+      >
+        <TodoModalContent id={id} title={title} />
+      </BottomSheetModal>
+
     </TouchableOpacity>
   );
 }

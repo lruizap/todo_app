@@ -4,8 +4,11 @@ import {
 
 export default function CheckMark({ id, completed, toggleTodo }) {
   async function toggle() {
-    const response = await fetch(`http://[IP]:8080/todos/${id}`, {
+    const response = await fetch(`http://192.168.0.26:8080/todos/${id}`, {
       method: "PUT",
+      headers: {
+        "Content-Type": 'application/json',
+      },
       body: JSON.stringify({
         value: completed ? false : true,
       }),
