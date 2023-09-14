@@ -1,7 +1,10 @@
+import Task from './components/Task.js';
+import InputTask from './components/InputTask.js';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
-import { FlatList, SafeAreaView, StyleSheet, Text, View, processColor } from 'react-native';
-import Task from './components/Task.js';
+import { FlatList, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function App() {
   const [todos, setTodos] = useState([]);
@@ -11,7 +14,7 @@ export default function App() {
   }, []);
 
   async function fetchData() {
-    const response = await fetch("http://[IP]:8080/todos/1");
+    const response = await fetch(`http://192.168.0.26:8080/todos/1`);
     const data = await response.json();
     setTodos(data);
   }
@@ -33,18 +36,21 @@ export default function App() {
   }
 
   return (
-    <View style={styles.container}>
-      <SafeAreaView>
-        <FlatList
-          data={todos}
-          keyExtractor={(todo) => todo.id}
-          renderItem={({ item }) => <Task {...item} toggleTodo={toggleTodo} clearTodo={clearTodo} />}
-          ListHeaderComponent={() => <Text style={styles.title}>Today</Text>}
-          contentContainerStyle={styles.contentContainerStyle}
-        />
-      </SafeAreaView>
-      <StatusBar style="auto" />
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <BottomSheetModalProvider>
+        <SafeAreaView style={styles.container}>
+          <FlatList
+            data={todos}
+            keyExtractor={(todo) => todo.id}
+            renderItem={({ item }) => <Task {...item} toggleTodo={toggleTodo} clearTodo={clearTodo} />}
+            ListHeaderComponent={() => <Text style={styles.title}>Today</Text>}
+            contentContainerStyle={styles.contentContainerStyle}
+          />
+          <InputTask todos={todos} setTodos={setTodos} />
+        </SafeAreaView>
+        <StatusBar style="auto" />
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   );
 }
 
