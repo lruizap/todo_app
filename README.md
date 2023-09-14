@@ -1,9 +1,19 @@
 # Todo_App
 
-Esta TODO APP, está dividida en una base de datos (SQL), un servidor (NodeJS) y una App móvil (React Native).
+This TODO APP is divided into a database (SQL), a server (NodeJS) and a mobile App (React Native).
 
-AL usar React Native, podremos crear aplicaciones tanto para IOS como para Android con un mismo código.
+By using React Native, we can create applications for both iOS and Android with the same code.
 
-EL servidor lo podemos implementar con muchas tecnologías, pero en nuestro caso, vamos a usar NodeJS con ExpressJS para crear nuestra API.
+The server can be implemented with many technologies, but in our case, we are going to use NodeJS with ExpressJS to create our API.
 
-Por último, utilizaremos una base de datos relacional SQL ya que esta aplicación, al ser sencilla, nos facilitará mucho el desarrollo.
+Finally, we will use a relational SQL database because this application, being simple, will make development much easier.
+
+To start the server section:
+
+`cd ./server`
+`yarn dev`
+
+To start the client section
+
+`cd ./client`
+`npx expo start`
